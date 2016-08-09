@@ -1,0 +1,14 @@
+general:
+  branches:
+    ignore:
+      - master
+dependencies:
+  pre:
+    - sudo apt-get update
+    - sudo apt-get -y install kernel-wedge dput
+    - git config --global user.name "${MAINTAINER}"
+    - git config --global user.email "${EMAIL}"
+    - echo "${GPG_KEY}" | base64 -d | gpg --import
+test:
+  override:
+    - ./build.sh

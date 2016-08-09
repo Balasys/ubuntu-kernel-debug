@@ -2,6 +2,9 @@
 
 set -e
 
+RELEASE=trusty
+KERNEL=xenial
+
 if [[ ${RELEASE} == ${KERNEL} ]]; then
   branch=master
   package=linux

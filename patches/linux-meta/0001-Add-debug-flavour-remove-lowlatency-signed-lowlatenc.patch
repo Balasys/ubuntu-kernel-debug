@@ -1,0 +1,212 @@
+From 102458ee74ac8fe27a063fe43d1c2edbe7025f9b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Mon, 8 Aug 2016 17:16:24 +0200
+Subject: [PATCH] Add debug flavour, remove lowlatency, signed-lowlatency and
+ virtual
+
+---
+ meta-source/debian/control.d/debug             | 48 +++++++++++++++++++++++
+ meta-source/debian/control.d/lowlatency        | 48 -----------------------
+ meta-source/debian/control.d/signed-lowlatency | 19 ---------
+ meta-source/debian/control.d/virtual           | 53 --------------------------
+ 4 files changed, 48 insertions(+), 120 deletions(-)
+ create mode 100644 meta-source/debian/control.d/debug
+ delete mode 100644 meta-source/debian/control.d/lowlatency
+ delete mode 100644 meta-source/debian/control.d/signed-lowlatency
+ delete mode 100644 meta-source/debian/control.d/virtual
+
+diff --git a/meta-source/debian/control.d/debug b/meta-source/debian/control.d/debug
+new file mode 100644
+index 0000000..d3f509f
+--- /dev/null
++++ b/meta-source/debian/control.d/debug
+@@ -0,0 +1,48 @@
++Package: linux-headers-debug@SUFFIX@
++Architecture: i386 amd64
++Section: devel
++Priority: optional
++Depends: ${misc:Depends}, linux-headers-${kernel-abi-version}-debug
++Description: debug Linux kernel headers
++ This package will always depend on the latest debug kernel headers
++ available.
++
++Package: linux-image-debug@SUFFIX@
++Architecture: i386 amd64
++Section: kernel
++Priority: optional
++Depends: ${misc:Depends}, linux-image-${kernel-abi-version}-debug, linux-firmware
++Recommends: thermald [i386 amd64]
++Description: debug Linux kernel image
++ This package will always depend on the latest debug kernel image
++ available.
++
++Package: linux-tools-debug@SUFFIX@
++Architecture: i386 amd64
++Section: kernel
++Priority: optional
++Provides: linux-tools
++Depends: ${misc:Depends}, linux-tools-${kernel-abi-version}-debug
++Description: debug Linux kernel tools
++ This package will always depend on the latest debug kernel tools
++ available.
++
++Package: linux-cloud-tools-debug@SUFFIX@
++Architecture: i386 amd64
++Section: kernel
++Priority: optional
++Provides: linux-cloud-tools
++Depends: ${misc:Depends}, linux-cloud-tools-${kernel-abi-version}-debug
++Description: debug Linux kernel cloud tools
++ This package will always depend on the latest debug kernel cloud tools
++ available.
++
++Package: linux-debug@SUFFIX@
++Architecture: i386 amd64
++Section: kernel
++Priority: optional
++Depends: ${misc:Depends}, linux-image-debug@SUFFIX@ (= ${binary:Version}), linux-headers-debug@SUFFIX@ (= ${binary:Version})
++Description: Complete debug Linux kernel
++ This package will always depend on the latest complete debug Linux kernel
++ available.
++
+diff --git a/meta-source/debian/control.d/lowlatency b/meta-source/debian/control.d/lowlatency
+deleted file mode 100644
+index 7f4fb42..0000000
+--- a/meta-source/debian/control.d/lowlatency
++++ /dev/null
+@@ -1,48 +0,0 @@
+-Package: linux-headers-lowlatency@SUFFIX@
+-Architecture: i386 amd64
+-Section: devel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-headers-${kernel-abi-version}-lowlatency
+-Description: lowlatency Linux kernel headers
+- This package will always depend on the latest lowlatency kernel headers
+- available.
+-
+-Package: linux-image-lowlatency@SUFFIX@
+-Architecture: i386 amd64
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-image-${kernel-abi-version}-lowlatency, linux-firmware
+-Recommends: thermald [i386 amd64]
+-Description: lowlatency Linux kernel image
+- This package will always depend on the latest lowlatency kernel image
+- available.
+-
+-Package: linux-tools-lowlatency@SUFFIX@
+-Architecture: i386 amd64
+-Section: kernel
+-Priority: optional
+-Provides: linux-tools
+-Depends: ${misc:Depends}, linux-tools-${kernel-abi-version}-lowlatency
+-Description: lowlatency Linux kernel tools
+- This package will always depend on the latest lowlatency kernel tools
+- available.
+-
+-Package: linux-cloud-tools-lowlatency@SUFFIX@
+-Architecture: i386 amd64
+-Section: kernel
+-Priority: optional
+-Provides: linux-cloud-tools
+-Depends: ${misc:Depends}, linux-cloud-tools-${kernel-abi-version}-lowlatency
+-Description: lowlatency Linux kernel cloud tools
+- This package will always depend on the latest lowlatency kernel cloud tools
+- available.
+-
+-Package: linux-lowlatency@SUFFIX@
+-Architecture: i386 amd64
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-image-lowlatency@SUFFIX@ (= ${binary:Version}), linux-headers-lowlatency@SUFFIX@ (= ${binary:Version})
+-Description: Complete lowlatency Linux kernel
+- This package will always depend on the latest complete lowlatency Linux kernel
+- available.
+-
+diff --git a/meta-source/debian/control.d/signed-lowlatency b/meta-source/debian/control.d/signed-lowlatency
+deleted file mode 100644
+index 9a1c99a..0000000
+--- a/meta-source/debian/control.d/signed-lowlatency
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Package: linux-signed-image-lowlatency@SUFFIX@
+-Architecture: amd64
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-signed-image-${kernel-abi-version}-lowlatency, linux-firmware
+-Recommends: thermald [i386 amd64]
+-Description: Signed Generic Linux kernel image
+- This package will always depend on the latest lowlatency kernel image
+- available.  Signed with the Ubuntu EFI key.
+-
+-Package: linux-signed-lowlatency@SUFFIX@
+-Architecture: amd64
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-signed-image-lowlatency@SUFFIX@ (= ${binary:Version}), linux-headers-lowlatency@SUFFIX@ (= ${binary:Version})
+-Description: Complete Signed Generic Linux kernel and headers
+- This package will always depend on the latest complete lowlatency Linux kernel
+- and headers.  Signed with the Ubuntu EFI key.
+-
+diff --git a/meta-source/debian/control.d/virtual b/meta-source/debian/control.d/virtual
+deleted file mode 100644
+index 6deaa94..0000000
+--- a/meta-source/debian/control.d/virtual
++++ /dev/null
+@@ -1,53 +0,0 @@
+-Package: linux-headers-virtual@SUFFIX@
+-Architecture: i386 amd64 ppc64el
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-headers-generic@SUFFIX@ (= ${binary:Version})
+-Description: Transitional package.
+- This package will always depend on linux-headers-generic.
+-
+-Package: linux-image-virtual@SUFFIX@
+-Architecture: i386 amd64 ppc64el
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-image-${kernel-abi-version}-generic
+-Description: This package will always depend on the latest minimal generic kernel image.
+- This package will always depend on the latest minimal generic kernel image
+- used for virtual instances.
+-
+-Package: linux-tools-virtual@SUFFIX@
+-Architecture: i386 amd64
+-Section: kernel
+-Priority: optional
+-Provides: linux-tools
+-Depends: ${misc:Depends}, linux-tools-${kernel-abi-version}-generic
+-Description: This package will always depend on the latest minimal generic kernel tools.
+- This package will always depend on the latest minimal generic kernel tools
+- used for virtual instances.
+-
+-Package: linux-cloud-tools-virtual@SUFFIX@
+-Architecture: i386 amd64
+-Section: kernel
+-Priority: optional
+-Provides: linux-cloud-tools
+-Depends: ${misc:Depends}, linux-cloud-tools-${kernel-abi-version}-generic
+-Description: This package will always depend on the latest minimal generic kernel cloud tools.
+- This package will always depend on the latest minimal generic kernel cloud tools
+- used for virtual instances.
+-
+-Package: linux-virtual@SUFFIX@
+-Architecture: i386 amd64 ppc64el
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-image-virtual@SUFFIX@ (= ${binary:Version}), linux-headers-virtual@SUFFIX@ (= ${binary:Version})
+-Description: Minimal Generic Linux kernel and headers
+- This package will always depend on linux-image-virtual and
+- linux-headers-virtual.
+-
+-Package: linux-image-extra-virtual@SUFFIX@
+-Architecture: i386 amd64
+-Section: kernel
+-Priority: optional
+-Depends: ${misc:Depends}, linux-image-generic@SUFFIX@ (= ${binary:Version})
+-Description: Transitional package.
+- This package will always depend on linux-image-generic.
+-- 
+2.9.2
+

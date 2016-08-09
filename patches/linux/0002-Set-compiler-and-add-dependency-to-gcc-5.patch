@@ -1,0 +1,49 @@
+From 222e6150d03f3343aefbdd8da55aed933470aa12 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Fri, 29 Jul 2016 14:45:52 +0000
+Subject: [PATCH 2/6] Set compiler and add dependency to gcc-5
+
+The source package build-depends, and the headers package depends on gcc-5.
+This is required for the inline instrumentation of KASan.
+---
+ Makefile                      | 2 +-
+ debian.xenial/control.stub.in | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 93925b2..33a772a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -342,7 +342,7 @@ include scripts/Kbuild.include
+ # Make variables (CC, etc...)
+ AS		= $(CROSS_COMPILE)as
+ LD		= $(CROSS_COMPILE)ld
+-CC		= $(CROSS_COMPILE)gcc
++CC		= $(CROSS_COMPILE)gcc-5
+ CPP		= $(CC) -E
+ AR		= $(CROSS_COMPILE)ar
+ NM		= $(CROSS_COMPILE)nm
+diff --git a/debian.xenial/control.stub.in b/debian.xenial/control.stub.in
+index 33f2743..c948123 100644
+--- a/debian.xenial/control.stub.in
++++ b/debian.xenial/control.stub.in
+@@ -34,6 +34,7 @@ Build-Depends:
+  automake,
+  libtool,
+  uuid-dev,
++ gcc-5,
+ Build-Depends-Indep:
+  xmlto,
+  docbook-utils,
+@@ -51,7 +52,7 @@ Architecture: all
+ Multi-Arch: foreign
+ Section: devel
+ Priority: optional
+-Depends: ${misc:Depends}, coreutils
++Depends: ${misc:Depends}, coreutils, gcc-5
+ Description: Header files related to Linux kernel version PKGVER
+  This package provides kernel header files for version PKGVER, for sites
+  that want the latest kernel headers. Please read
+-- 
+2.9.2
+

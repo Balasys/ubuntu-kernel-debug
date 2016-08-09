@@ -1,0 +1,29 @@
+From 524100df3a42955b4baf5ce3d90de4aef73d3f5c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Fri, 29 Jul 2016 14:56:24 +0000
+Subject: [PATCH 4/6] Ignore ABI changes
+
+---
+ debian.xenial/abi/4.4.0-33.52/amd64/ignore         | 1 +
+ debian.xenial/abi/4.4.0-33.52/amd64/ignore.modules | 1 +
+ 2 files changed, 2 insertions(+)
+ create mode 100644 debian.xenial/abi/4.4.0-33.52/amd64/ignore
+ create mode 100644 debian.xenial/abi/4.4.0-33.52/amd64/ignore.modules
+
+diff --git a/debian.xenial/abi/4.4.0-33.52/amd64/ignore b/debian.xenial/abi/4.4.0-33.52/amd64/ignore
+new file mode 100644
+index 0000000..d00491f
+--- /dev/null
++++ b/debian.xenial/abi/4.4.0-33.52/amd64/ignore
+@@ -0,0 +1 @@
++1
+diff --git a/debian.xenial/abi/4.4.0-33.52/amd64/ignore.modules b/debian.xenial/abi/4.4.0-33.52/amd64/ignore.modules
+new file mode 100644
+index 0000000..d00491f
+--- /dev/null
++++ b/debian.xenial/abi/4.4.0-33.52/amd64/ignore.modules
+@@ -0,0 +1 @@
++1
+-- 
+2.9.2
+

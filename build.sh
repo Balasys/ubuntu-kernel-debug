@@ -2,6 +2,9 @@
 
 set -e
 
+RELEASE=trusty
+KERNEL=wily
+
 if [[ ${RELEASE} == ${KERNEL} ]]; then
   branch=master
   package=linux

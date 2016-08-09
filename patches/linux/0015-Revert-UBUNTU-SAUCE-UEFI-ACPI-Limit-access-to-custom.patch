@@ -1,0 +1,28 @@
+From 7fe4ae2d0847cb8ac97c6ccf4df88a32495f5a95 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:43 +0200
+Subject: [PATCH 15/19] Revert "UBUNTU: SAUCE: UEFI: ACPI: Limit access to
+ custom_method"
+
+This reverts commit a03ee6ee051a9495e07a7558ecb0de82b7db55e1.
+---
+ drivers/acpi/custom_method.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/acpi/custom_method.c b/drivers/acpi/custom_method.c
+index 4277938..c68e724 100644
+--- a/drivers/acpi/custom_method.c
++++ b/drivers/acpi/custom_method.c
+@@ -29,9 +29,6 @@ static ssize_t cm_write(struct file *file, const char __user * user_buf,
+ 	struct acpi_table_header table;
+ 	acpi_status status;
+ 
+-	if (secure_modules())
+-		return -EPERM;
+-
+ 	if (!(*ppos)) {
+ 		/* parse the table header to get the table length */
+ 		if (count <= sizeof(struct acpi_table_header))
+-- 
+2.9.2
+

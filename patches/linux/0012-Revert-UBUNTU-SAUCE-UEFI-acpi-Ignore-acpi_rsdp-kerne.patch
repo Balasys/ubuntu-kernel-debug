@@ -1,0 +1,35 @@
+From 1d139c199fcdc0801de3bc2b0a991820dd405a06 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:41 +0200
+Subject: [PATCH 12/19] Revert "UBUNTU: SAUCE: UEFI: acpi: Ignore acpi_rsdp
+ kernel parameter when module loading is restricted"
+
+This reverts commit fa29882ad4f613b7b807cd278aa836c4499dce2a.
+---
+ drivers/acpi/osl.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+index 851dccf..111ec4a 100644
+--- a/drivers/acpi/osl.c
++++ b/drivers/acpi/osl.c
+@@ -44,7 +44,6 @@
+ #include <linux/list.h>
+ #include <linux/jiffies.h>
+ #include <linux/semaphore.h>
+-#include <linux/module.h>
+ 
+ #include <asm/io.h>
+ #include <asm/uaccess.h>
+@@ -257,7 +256,7 @@ early_param("acpi_rsdp", setup_acpi_rsdp);
+ acpi_physical_address __init acpi_os_get_root_pointer(void)
+ {
+ #ifdef CONFIG_KEXEC
+-	if (acpi_rsdp && !secure_modules())
++	if (acpi_rsdp)
+ 		return acpi_rsdp;
+ #endif
+ 
+-- 
+2.9.2
+

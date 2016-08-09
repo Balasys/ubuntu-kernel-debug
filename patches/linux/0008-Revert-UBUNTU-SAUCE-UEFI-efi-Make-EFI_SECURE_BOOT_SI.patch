@@ -1,0 +1,28 @@
+From 214086ebb7f01ef6c8eab7a3a43d1810dcfcbff7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:37 +0200
+Subject: [PATCH 08/19] Revert "UBUNTU: SAUCE: UEFI: efi: Make
+ EFI_SECURE_BOOT_SIG_ENFORCE depend on EFI"
+
+This reverts commit bb605a296f1d8fadac48503e9fd1e042eaf94a8d.
+---
+ arch/x86/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index ff7fa56..24b2c05 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1729,8 +1729,7 @@ config EFI_MIXED
+ 	   If unsure, say N.
+ 
+ config EFI_SECURE_BOOT_SIG_ENFORCE
+-	def_bool n
+-	depends on EFI
++        def_bool n
+ 	prompt "Force module signing when UEFI Secure Boot is enabled"
+ 	---help---
+ 	  UEFI Secure Boot provides a mechanism for ensuring that the
+-- 
+2.9.2
+

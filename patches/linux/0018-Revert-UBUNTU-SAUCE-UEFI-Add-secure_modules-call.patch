@@ -1,0 +1,56 @@
+From bf78afcd6ad9a40fba28c710e593d1c2f77150d7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:46 +0200
+Subject: [PATCH 18/19] Revert "UBUNTU: SAUCE: UEFI: Add secure_modules() call"
+
+This reverts commit 69094cbba1c0e51a6c24174c38e93d23748e103d.
+---
+ include/linux/module.h |  6 ------
+ kernel/module.c        | 10 ----------
+ 2 files changed, 16 deletions(-)
+
+diff --git a/include/linux/module.h b/include/linux/module.h
+index db38634..3a19c79 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -635,8 +635,6 @@ static inline bool module_requested_async_probing(struct module *module)
+ 	return module && module->async_probe_requested;
+ }
+ 
+-extern bool secure_modules(void);
+-
+ #else /* !CONFIG_MODULES... */
+ 
+ /* Given an address, look for it in the exception tables. */
+@@ -753,10 +751,6 @@ static inline bool module_requested_async_probing(struct module *module)
+ 	return false;
+ }
+ 
+-static inline bool secure_modules(void)
+-{
+-	return false;
+-}
+ #endif /* CONFIG_MODULES */
+ 
+ #ifdef CONFIG_SYSFS
+diff --git a/kernel/module.c b/kernel/module.c
+index 88bd7ec..14833e6 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -4101,13 +4101,3 @@ void module_layout(struct module *mod,
+ }
+ EXPORT_SYMBOL(module_layout);
+ #endif
+-
+-bool secure_modules(void)
+-{
+-#ifdef CONFIG_MODULE_SIG
+-	return (sig_enforce || modules_disabled);
+-#else
+-	return modules_disabled;
+-#endif
+-}
+-EXPORT_SYMBOL(secure_modules);
+-- 
+2.9.2
+

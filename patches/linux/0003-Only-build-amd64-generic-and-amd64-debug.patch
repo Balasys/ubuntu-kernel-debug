@@ -1,0 +1,25 @@
+From 1cdd33cc30679f635318ca0a61e8bffe023834de Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Fri, 29 Jul 2016 14:50:57 +0000
+Subject: [PATCH 03/19] Only build amd64-generic and amd64-debug
+
+---
+ debian.wily/rules.d/amd64.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/debian.wily/rules.d/amd64.mk b/debian.wily/rules.d/amd64.mk
+index e48f3b1..2bbf58a 100644
+--- a/debian.wily/rules.d/amd64.mk
++++ b/debian.wily/rules.d/amd64.mk
+@@ -2,7 +2,7 @@ human_arch	= 64 bit x86
+ build_arch	= x86_64
+ header_arch	= $(build_arch)
+ defconfig	= defconfig
+-flavours	= generic lowlatency
++flavours	= generic debug
+ build_image	= bzImage
+ kernel_file	= arch/$(build_arch)/boot/bzImage
+ install_file	= vmlinuz
+-- 
+2.9.2
+

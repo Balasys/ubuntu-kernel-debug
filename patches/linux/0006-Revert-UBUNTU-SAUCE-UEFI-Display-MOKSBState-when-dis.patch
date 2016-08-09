@@ -1,0 +1,75 @@
+From c49f41164ad044f87bbe85c4389c1d17178f4fda Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:36 +0200
+Subject: [PATCH 06/19] Revert "UBUNTU: SAUCE: UEFI: Display MOKSBState when
+ disabled"
+
+This reverts commit 1d873a33874480ac89271dabc1a3d7ca3ff35942.
+---
+ arch/x86/boot/compressed/eboot.c | 9 ++++-----
+ arch/x86/kernel/setup.c          | 7 +------
+ include/linux/efi.h              | 3 ---
+ 3 files changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/boot/compressed/eboot.c b/arch/x86/boot/compressed/eboot.c
+index 260dd66..e5c7deb 100644
+--- a/arch/x86/boot/compressed/eboot.c
++++ b/arch/x86/boot/compressed/eboot.c
+@@ -870,15 +870,14 @@ static int get_secure_boot(void)
+ 
+ 	/* If it fails, we don't care why.  Default to secure */
+ 	if (status != EFI_SUCCESS)
+-		return EFI_SECURE_BOOT;
++		return 1;
+ 
+ 	if (!(attr & EFI_VARIABLE_RUNTIME_ACCESS)) {
+-		if (moksbstate == 1) {
+-			return EFI_MOKSBSTATE_DISABLED;
+-		}
++		if (moksbstate == 1)
++			return 0;
+ 	}
+ 
+-	return EFI_SECURE_BOOT;
++	return 1;
+ }
+ 
+ 
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index a7d6b72..3064c81 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -1161,15 +1161,10 @@ void __init setup_arch(char **cmdline_p)
+ 	io_delay_init();
+ 
+ #ifdef CONFIG_EFI_SECURE_BOOT_SIG_ENFORCE
+-	if (boot_params.secure_boot == EFI_SECURE_BOOT) {
+-		set_bit(EFI_SECURE_BOOT, &efi.flags);
++	if (boot_params.secure_boot) {
+ 		enforce_signed_modules();
+ 		pr_info("Secure boot enabled\n");
+ 	}
+-	else if (boot_params.secure_boot == EFI_MOKSBSTATE_DISABLED) {
+-		boot_params.secure_boot = 0;
+-		pr_info("Secure boot MOKSBState disabled\n");
+-    }
+ #endif
+ 
+ 	/*
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index 09a222a..db543f3 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -965,9 +965,6 @@ extern int __init efi_setup_pcdp_console(char *);
+ #define EFI_PARAVIRT		6	/* Access is via a paravirt interface */
+ #define EFI_ARCH_1		7	/* First arch-specific bit */
+ #define EFI_DBG			8	/* Print additional debug info at runtime */
+-#define EFI_NX_PE_DATA		9	/* Can runtime data regions be mapped non-executable? */
+-#define EFI_SECURE_BOOT		10	/* Are we in Secure Boot mode? */
+-#define EFI_MOKSBSTATE_DISABLED	11	/* Secure boot mode disabled in the MOK */
+ 
+ #ifdef CONFIG_EFI
+ /*
+-- 
+2.9.2
+

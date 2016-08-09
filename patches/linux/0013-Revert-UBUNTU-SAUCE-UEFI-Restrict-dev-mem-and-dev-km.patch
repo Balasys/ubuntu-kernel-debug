@@ -1,0 +1,38 @@
+From 6c69647cf098b417644aff1445b0359d3c125409 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:41 +0200
+Subject: [PATCH 13/19] Revert "UBUNTU: SAUCE: UEFI: Restrict /dev/mem and
+ /dev/kmem when module loading is restricted"
+
+This reverts commit e7405685818912bf4ab1ea5a60353eda799280aa.
+---
+ drivers/char/mem.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index b52c888..53fe675 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -167,9 +167,6 @@ static ssize_t write_mem(struct file *file, const char __user *buf,
+ 	if (p != *ppos)
+ 		return -EFBIG;
+ 
+-	if (secure_modules())
+-		return -EPERM;
+-
+ 	if (!valid_phys_addr_range(p, count))
+ 		return -EFAULT;
+ 
+@@ -516,9 +513,6 @@ static ssize_t write_kmem(struct file *file, const char __user *buf,
+ 	char *kbuf; /* k-addr because vwrite() takes vmlist_lock rwlock */
+ 	int err = 0;
+ 
+-	if (secure_modules())
+-		return -EPERM;
+-
+ 	if (p < (unsigned long) high_memory) {
+ 		unsigned long to_write = min_t(unsigned long, count,
+ 					       (unsigned long)high_memory - p);
+-- 
+2.9.2
+

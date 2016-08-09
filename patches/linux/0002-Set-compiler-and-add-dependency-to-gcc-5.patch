@@ -1,0 +1,50 @@
+From 222e6150d03f3343aefbdd8da55aed933470aa12 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Fri, 29 Jul 2016 14:45:52 +0000
+Subject: [PATCH 02/19] Set compiler and add dependency to gcc-5
+
+The source package build-depends, and the headers package depends on gcc-5.
+This is required for the inline instrumentation of KASan.
+---
+ Makefile                    | 2 +-
+ debian.wily/control.stub.in | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 55f6f40..4243cf6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -342,7 +342,7 @@ include scripts/Kbuild.include
+ # Make variables (CC, etc...)
+ AS		= $(CROSS_COMPILE)as
+ LD		= $(CROSS_COMPILE)ld
+-CC		= $(CROSS_COMPILE)gcc
++CC		= $(CROSS_COMPILE)gcc-5
+ CPP		= $(CC) -E
+ AR		= $(CROSS_COMPILE)ar
+ NM		= $(CROSS_COMPILE)nm
+diff --git a/debian.wily/control.stub.in b/debian.wily/control.stub.in
+index bebbd71..962668a 100644
+--- a/debian.wily/control.stub.in
++++ b/debian.wily/control.stub.in
+@@ -3,7 +3,7 @@ Section: devel
+ Priority: optional
+ Maintainer: Ubuntu Kernel Team <kernel-team@lists.ubuntu.com>
+ Standards-Version: 3.9.4.0
+-Build-Depends: debhelper (>= 5), dh-systemd, cpio, module-init-tools, kernel-wedge (>= 2.24ubuntu1), makedumpfile [amd64 i386], libelf-dev, libnewt-dev, libiberty-dev, rsync, libdw-dev, libpci-dev, dpkg (>= 1.16.0~ubuntu4), pkg-config, flex, bison, libunwind8-dev, openssl, libaudit-dev, bc, python-dev, gawk, device-tree-compiler [powerpc], u-boot-tools [powerpc], libc6-dev-ppc64 [powerpc], libudev-dev, autoconf, automake, libtool
++Build-Depends: debhelper (>= 5), dh-systemd, cpio, module-init-tools, kernel-wedge (>= 2.24ubuntu1), makedumpfile [amd64 i386], libelf-dev, libnewt-dev, libiberty-dev, rsync, libdw-dev, libpci-dev, dpkg (>= 1.16.0~ubuntu4), pkg-config, flex, bison, libunwind8-dev, openssl, libaudit-dev, bc, python-dev, gawk, device-tree-compiler [powerpc], u-boot-tools [powerpc], libc6-dev-ppc64 [powerpc], libudev-dev, autoconf, automake, libtool, gcc-5
+ Build-Depends-Indep: xmlto, docbook-utils, ghostscript, transfig, bzip2, sharutils, asciidoc
+ Vcs-Git: http://kernel.ubuntu.com/git-repos/ubuntu/ubuntu-trusty.git
+ XS-Testsuite: autopkgtest
+@@ -14,7 +14,7 @@ Architecture: all
+ Multi-Arch: foreign
+ Section: devel
+ Priority: optional
+-Depends: ${misc:Depends}, coreutils | fileutils (>= 4.0)
++Depends: ${misc:Depends}, coreutils | fileutils (>= 4.0), gcc-5
+ Description: Header files related to Linux kernel version PKGVER
+  This package provides kernel header files for version PKGVER, for sites
+  that want the latest kernel headers. Please read
+-- 
+2.9.2
+

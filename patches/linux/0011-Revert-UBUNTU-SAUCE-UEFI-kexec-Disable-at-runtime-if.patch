@@ -1,0 +1,35 @@
+From feaa43b11d5ac416ab3c3fda45b780a1b0b10d24 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:40 +0200
+Subject: [PATCH 11/19] Revert "UBUNTU: SAUCE: UEFI: kexec: Disable at runtime
+ if the kernel enforces module loading restrictions"
+
+This reverts commit 0fa229a3a6d7944cea4a6c82f098d0ab226a7c4d.
+---
+ kernel/kexec.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/kernel/kexec.c b/kernel/kexec.c
+index 525d328..a785c10 100644
+--- a/kernel/kexec.c
++++ b/kernel/kexec.c
+@@ -36,7 +36,6 @@
+ #include <linux/syscore_ops.h>
+ #include <linux/compiler.h>
+ #include <linux/hugetlb.h>
+-#include <linux/module.h>
+ 
+ #include <asm/page.h>
+ #include <asm/uaccess.h>
+@@ -1255,7 +1254,7 @@ SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
+ 	int result;
+ 
+ 	/* We only trust the superuser with rebooting the system. */
+-	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled || secure_modules())
++	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+ 		return -EPERM;
+ 
+ 	/*
+-- 
+2.9.2
+

@@ -1,0 +1,39 @@
+From 048c67a150c45f3f6202264ea3241f6da75f21a1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:39 +0200
+Subject: [PATCH 10/19] Revert "UBUNTU: SAUCE: UEFI: x86: Restrict MSR access
+ when module loading is restricted"
+
+This reverts commit 31bca32d3de50770b67f81c7dbd280089f105cef.
+---
+ arch/x86/kernel/msr.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
+index 26c2f83..113e707 100644
+--- a/arch/x86/kernel/msr.c
++++ b/arch/x86/kernel/msr.c
+@@ -105,9 +105,6 @@ static ssize_t msr_write(struct file *file, const char __user *buf,
+ 	int err = 0;
+ 	ssize_t bytes = 0;
+ 
+-	if (secure_modules())
+-		return -EPERM;
+-
+ 	if (count % 8)
+ 		return -EINVAL;	/* Invalid chunk size */
+ 
+@@ -155,10 +152,6 @@ static long msr_ioctl(struct file *file, unsigned int ioc, unsigned long arg)
+ 			err = -EBADF;
+ 			break;
+ 		}
+-		if (secure_modules()) {
+-			err = -EPERM;
+-			break;
+-		}
+ 		if (copy_from_user(&regs, uregs, sizeof regs)) {
+ 			err = -EFAULT;
+ 			break;
+-- 
+2.9.2
+

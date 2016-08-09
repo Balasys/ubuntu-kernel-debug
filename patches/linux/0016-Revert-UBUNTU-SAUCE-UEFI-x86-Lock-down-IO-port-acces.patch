@@ -1,0 +1,67 @@
+From bd06c2e61532964ce65d640ccffe1d5f559a361e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
+Date: Thu, 14 Jul 2016 08:37:44 +0200
+Subject: [PATCH 16/19] Revert "UBUNTU: SAUCE: UEFI: x86: Lock down IO port
+ access when module security is enabled"
+
+This reverts commit 20033e6364861490bc93cdf9716611e5734d9bac.
+---
+ arch/x86/kernel/ioport.c | 5 ++---
+ drivers/char/mem.c       | 4 ----
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kernel/ioport.c b/arch/x86/kernel/ioport.c
+index ab83724..589b319 100644
+--- a/arch/x86/kernel/ioport.c
++++ b/arch/x86/kernel/ioport.c
+@@ -15,7 +15,6 @@
+ #include <linux/thread_info.h>
+ #include <linux/syscalls.h>
+ #include <linux/bitmap.h>
+-#include <linux/module.h>
+ #include <asm/syscalls.h>
+ 
+ /*
+@@ -29,7 +28,7 @@ asmlinkage long sys_ioperm(unsigned long from, unsigned long num, int turn_on)
+ 
+ 	if ((from + num <= from) || (from + num > IO_BITMAP_BITS))
+ 		return -EINVAL;
+-	if (turn_on && (!capable(CAP_SYS_RAWIO) || secure_modules()))
++	if (turn_on && !capable(CAP_SYS_RAWIO))
+ 		return -EPERM;
+ 
+ 	/*
+@@ -109,7 +108,7 @@ SYSCALL_DEFINE1(iopl, unsigned int, level)
+ 		return -EINVAL;
+ 	/* Trying to gain more privileges? */
+ 	if (level > old) {
+-		if (!capable(CAP_SYS_RAWIO) || secure_modules())
++		if (!capable(CAP_SYS_RAWIO))
+ 			return -EPERM;
+ 	}
+ 	regs->flags = (regs->flags & ~X86_EFLAGS_IOPL) |
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index 53fe675..6b1721f 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -27,7 +27,6 @@
+ #include <linux/export.h>
+ #include <linux/io.h>
+ #include <linux/uio.h>
+-#include <linux/module.h>
+ 
+ #include <linux/uaccess.h>
+ 
+@@ -578,9 +577,6 @@ static ssize_t write_port(struct file *file, const char __user *buf,
+ 	unsigned long i = *ppos;
+ 	const char __user *tmp = buf;
+ 
+-	if (secure_modules())
+-		return -EPERM;
+-
+ 	if (!access_ok(VERIFY_READ, buf, count))
+ 		return -EFAULT;
+ 	while (count-- > 0 && i < 65536) {
+-- 
+2.9.2
+

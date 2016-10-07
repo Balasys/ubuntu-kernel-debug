@@ -46,6 +46,12 @@ apply_patches() {
   popd
 }
 
+ignore_abi_changes() {
+  abi_directory=$(find ubuntu-${RELEASE}/${debian_dir}/abi -mindepth 1 -maxdepth 1 -type d)
+  echo 1 > ${abi_directory}/amd64/ignore
+  echo 1 > ${abi_directory}/amd64/ignore.modules
+}
+
 apply_meta_patches() {
   pushd ubuntu-${RELEASE}-meta
   git am ../patches/linux-meta/*.patch
@@ -99,6 +105,8 @@ get_meta_source
 
 apply_patches
 apply_meta_patches
+
+ignore_abi_changes
 
 update_changelog
 update_meta_changelog

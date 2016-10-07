@@ -1,7 +1,7 @@
-From 1cdd33cc30679f635318ca0a61e8bffe023834de Mon Sep 17 00:00:00 2001
+From 048740ed1f2523fb8d6afc7c906ddfbe1d3705e2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Jakab=20Krist=C3=B3f?= <jakab.kristof@balasys.hu>
-Date: Fri, 29 Jul 2016 14:50:57 +0000
-Subject: [PATCH 3/6] Only build amd64-generic and amd64-debug
+Date: Thu, 6 Oct 2016 16:13:37 +0200
+Subject: [PATCH 3/4] Only build amd64-generic and amd64-debug
 
 ---
  debian.xenial/rules.d/amd64.mk | 2 +-
@@ -21,5 +21,5 @@ index e97df86..8647a37 100644
  kernel_file	= arch/$(build_arch)/boot/bzImage
  install_file	= vmlinuz
 -- 
-2.9.2
+1.9.1
 

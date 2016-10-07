@@ -1,7 +1,7 @@
-From 72cefef988745bc593929446a4ac462d2f067541 Mon Sep 17 00:00:00 2001
+From ab2da73c55661d249b4dfa6eaf2dfa7d5d94c33b Mon Sep 17 00:00:00 2001
 From: Eric Dumazet <edumazet@google.com>
 Date: Thu, 30 Jun 2016 16:13:41 +0200
-Subject: [PATCH 6/6] bonding: prevent out of bound accesses
+Subject: [PATCH 4/4] bonding: prevent out of bound accesses
 
 ether_addr_equal_64bits() requires some care about its arguments,
 namely that 8 bytes might be read, even if last 2 byte values are not
@@ -30,7 +30,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  3 files changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 7fde4d5..0e555de 100644
+index 940e2eb..b802f6f 100644
 --- a/drivers/net/bonding/bond_3ad.c
 +++ b/drivers/net/bonding/bond_3ad.c
 @@ -100,11 +100,14 @@ enum ad_link_speed_type {
@@ -50,7 +50,7 @@ index 7fde4d5..0e555de 100644
  
  /* ================= main 802.3ad protocol functions ================== */
  static int ad_lacpdu_send(struct port *port);
-@@ -1702,7 +1705,7 @@ static void ad_clear_agg(struct aggregator *aggregator)
+@@ -1701,7 +1704,7 @@ static void ad_clear_agg(struct aggregator *aggregator)
  		aggregator->is_individual = false;
  		aggregator->actor_admin_aggregator_key = 0;
  		aggregator->actor_oper_aggregator_key = 0;
@@ -59,7 +59,7 @@ index 7fde4d5..0e555de 100644
  		aggregator->partner_system_priority = 0;
  		aggregator->partner_oper_aggregator_key = 0;
  		aggregator->receive_state = 0;
-@@ -1724,7 +1727,7 @@ static void ad_initialize_agg(struct aggregator *aggregator)
+@@ -1723,7 +1726,7 @@ static void ad_initialize_agg(struct aggregator *aggregator)
  	if (aggregator) {
  		ad_clear_agg(aggregator);
  
@@ -89,7 +89,7 @@ index bb9e9fc..bcfbc1c 100644
  };
  static const int alb_delta_in_ticks = HZ / ALB_TIMER_TICKS_PER_SEC;
 diff --git a/include/net/bonding.h b/include/net/bonding.h
-index c87fa4f..423a93b 100644
+index 93abe5f..51d02bf 100644
 --- a/include/net/bonding.h
 +++ b/include/net/bonding.h
 @@ -34,6 +34,9 @@
@@ -114,5 +114,5 @@ index c87fa4f..423a93b 100644
  
  struct bond_parm_tbl {
 -- 
-2.9.2
+1.9.1
 

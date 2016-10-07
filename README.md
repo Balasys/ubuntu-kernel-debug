@@ -10,9 +10,7 @@
 - a Launchpad PPA you have access to under `${PPA}`
 
 # Notes on this example
-This patchset enables the [KASan](https://www.kernel.org/doc/Documentation/kasan.txt) kernel configuration on a kernel built for Trusty.
+This patchset enables the [KASan](https://www.kernel.org/doc/Documentation/kasan.txt) and [kmemleak](https://www.kernel.org/doc/Documentation/kmemleak.txt) kernel configurations on a kernel built for Trusty.
 Since KASan requires gcc-5, which is not present in Trusty, you have to add the [Toolchain test builds](https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test) PPA as a PPA dependency for your own PPA.
 
-Also, Ubuntu has a few UEFI-related patches that break compiling with KASan. These have been reverted (see `patches/linux/*-Revert-*.patch`).
-
-Additionally, an upstream [patch](patches/linux/0006-bonding-prevent-out-of-bound-accesses.patch) from 4.7 has been applied to prevent out of bounds accesses in bonding.
+Additionally, an upstream patch from 4.7 has been applied to prevent out of bounds accesses in bonding.
